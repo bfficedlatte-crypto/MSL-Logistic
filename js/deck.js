@@ -26,8 +26,13 @@
   var DIM   = 0.4;    // how much its content fades
   var ticking = false;
 
+  var list = cards[0].parentNode;
+
   function frame() {
     ticking = false;
+    // Nothing to compute while the deck is nowhere near the viewport.
+    var box = list.getBoundingClientRect();
+    if (box.bottom < -200 || box.top > window.innerHeight + 200) return;
     for (var i = 0; i < cards.length; i++) {
       var card = cards[i];
       var next = cards[i + 1];

@@ -163,3 +163,70 @@
 
 .deck__card{transition:box-shadow .4s var(--ease)}
 .deck__card:hover{box-shadow:0 -1px 0 var(--ink)}
+.lede__title .line:nth-child(3) > span{animation-delay:1.78s}
+.type-line{animation:rise .9s var(--ease) 1.95s both}
+.lede__sub{animation:rise .9s var(--ease) 2.08s both}
+.lede__actions{animation:rise .9s var(--ease) 2.2s both}
+@media (prefers-reduced-motion:reduce){
+  .type-line,.lede__sub,.lede__actions{opacity:1;transform:none}
+  .type-line__caret{animation:none;opacity:0}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .header__logo-icon{animation:none;transform:none}
+}
+
+/* About cards ----------------------------------------------------------- */
+
+.pillar.is-armed{opacity:0;transform:translateY(24px)}
+.pillar.is-armed{transition:opacity .75s var(--ease),transform .75s var(--ease),border-color .35s var(--ease)}
+.pillar.is-armed,.pillar.is-armed::before{transition-delay:calc(var(--i) * 140ms)}
+.pillar.is-armed.is-on{opacity:1;transform:none}
+.pillar.is-armed [data-draw]{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);transition:stroke-dashoffset .9s var(--ease);transition-delay:calc(var(--i) * 140ms + 260ms)}
+.pillar.is-armed.is-on [data-draw]{stroke-dashoffset:0}
+
+@media (prefers-reduced-motion:reduce){
+  .pillar,.pillar.is-armed{opacity:1;transform:none}
+  .pillar::before{transform:scaleX(1)}
+  .pillar [data-draw]{stroke-dasharray:none;stroke-dashoffset:0}
+}
+
+/* About icons keep moving once they have drawn themselves in ------------ */
+
+.pillar.is-on .i-pupil{animation:eye-scan 5.5s var(--ease) 1.1s infinite}
+@keyframes eye-scan{
+  0%,100%{transform:translateX(-1.4px)}
+  45%{transform:translateX(1.4px)}
+  50%{transform:translateX(1.4px)}
+}
+
+.pillar.is-on .i-ring1{animation:ring-pulse 3.2s var(--ease) 1.1s infinite}
+.pillar.is-on .i-ring2{animation:ring-pulse 3.2s var(--ease) 1.35s infinite}
+.pillar.is-on .i-ring3{animation:ring-dot 3.2s var(--ease) 1.6s infinite}
+@keyframes ring-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.12);opacity:.55}}
+@keyframes ring-dot{0%,100%{transform:scale(1)}50%{transform:scale(1.9)}}
+
+.pillar.is-on .i-seal{animation:seal-turn 9s linear 1.1s infinite}
+@keyframes seal-turn{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.pillar.is-on .i-seal{stroke-dasharray:34 8}
+.pillar.is-on .i-check{animation:check-beat 3.6s var(--ease) 1.4s infinite}
+@keyframes check-beat{0%,72%,100%{opacity:1}80%{opacity:.35}}
+
+@media (prefers-reduced-motion:reduce){
+  .pillar.is-on .i-pupil,.pillar.is-on .i-ring1,.pillar.is-on .i-ring2,
+  .pillar.is-on .i-ring3,.pillar.is-on .i-seal,.pillar.is-on .i-check{animation:none}
+  .pillar.is-on .i-seal{stroke-dasharray:none}
+}
+
+/* Client types highlight in sequence once the intro has settled --------- */
+
+.mk::before{animation:mark-sweep .55s var(--ease) both;animation-delay:calc(2.45s + var(--i) * 260ms)}
+@keyframes mark-sweep{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+.mk:hover::before{animation:mark-sweep .4s var(--ease) both}
+
+@media (prefers-reduced-motion:reduce){
+  .mk::before{animation:none;transform:scaleX(1)}
+}
+.lede__kicker{animation:rise .8s var(--ease) 1.5s both}
+@media (prefers-reduced-motion:reduce){ .lede__kicker{opacity:1;transform:none} }

@@ -238,3 +238,276 @@
     });
   }
 })();
+
+/* Coverage map: province shapes and the list drive each other. */
+(function () {
+  var svg = document.querySelector('.cover__map svg');
+  var panel = document.querySelector('.cover__panel');
+  if (!svg || !panel) return;
+
+  var readNum = panel.querySelector('.cover__readout-num');
+  var readLabel = panel.querySelector('.cover__readout-label');
+  var rows = Array.prototype.slice.call(panel.querySelectorAll('.cover__row'));
+  var shapes = Array.prototype.slice.call(svg.querySelectorAll('.prov'));
+  var pins = Array.prototype.slice.call(svg.querySelectorAll('.cover__pin'));
+  var locked = null;
+
+  function show(key) {
+    shapes.forEach(function (s) { s.classList.toggle('is-on', s.dataset.prov === key); });
+    pins.forEach(function (n) { n.classList.toggle('is-on', n.dataset.prov === key); });
+    rows.forEach(function (r) { r.classList.toggle('is-on', r.dataset.prov === key); });
+    var row = rows.filter(function (r) { return r.dataset.prov === key; })[0];
+    if (row) {
+      readNum.textContent = row.querySelector('.cover__num').textContent;
+      readLabel.textContent = 'districts in ' + row.querySelector('.cover__name').textContent +
+                              ', capital ' + row.querySelector('.cover__hq').textContent;
+    }
+  }
+
+  function reset() {
+    if (locked) { show(locked); return; }
+    shapes.forEach(function (s) { s.classList.remove('is-on'); });
+    pins.forEach(function (n) { n.classList.remove('is-on'); });
+    rows.forEach(function (r) { r.classList.remove('is-on'); });
+    readNum.textContent = '77';
+    readLabel.textContent = 'districts across 7 provinces';
+  }
+
+  function wire(el) {
+    var key = el.dataset.prov;
+    el.addEventListener('mouseenter', function () { show(key); });
+    el.addEventListener('focus', function () { show(key); });
+    el.addEventListener('mouseleave', reset);
+    el.addEventListener('blur', reset);
+    el.addEventListener('click', function () {
+      locked = locked === key ? null : key;
+      locked ? show(key) : reset();
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+    });
+  }
+
+  shapes.forEach(function (s) { if (s.dataset.prov) wire(s); });
+  rows.forEach(wire);
+})();
+
+/* Hero typewriter: cycles the audiences the company moves for. */
+(function () {
+  var line = document.getElementById('typeLine');
+  if (!line) return;
+
+  var slot = line.querySelector('.type-line__text');
+  var words = (line.dataset.words || '').split('|').filter(Boolean);
+  if (!words.length || !slot) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    slot.textContent = words.join(', ');
+    return;
+  }
+
+  var TYPE = 62, ERASE = 34, HOLD = 1700, GAP = 420;
+  var w = 0, c = 0, erasing = false;
+
+  slot.textContent = '';
+
+  (function tick() {
+    var word = words[w];
+    if (!erasing) {
+      c++;
+      slot.textContent = word.slice(0, c);
+      if (c === word.length) { erasing = true; return setTimeout(tick, HOLD); }
+      return setTimeout(tick, TYPE + Math.random() * 45);
+    }
+    c--;
+    slot.textContent = word.slice(0, c);
+    if (c === 0) {
+      erasing = false;
+      w = (w + 1) % words.length;
+      return setTimeout(tick, GAP);
+    }
+    setTimeout(tick, ERASE);
+  })();
+})();
+
+/* Process rail: the consignment marker advances as you scroll the section. */
+(function () {
+  var body = document.querySelector('.track__body');
+  if (!body) return;
+
+  var steps = Array.prototype.slice.call(body.querySelectorAll('.track__step'));
+  var fill = document.getElementById('trackFill');
+  var pip = document.getElementById('trackPip');
+  var rail = body.querySelector('.track__rail');
+  if (!steps.length || !fill || !rail) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    steps.forEach(function (s) { s.classList.add('is-on'); });
+    fill.style.height = '100%';
+    return;
+  }
+
+  var ticking = false;
+
+  function frame() {
+    ticking = false;
+    var box = body.getBoundingClientRect();
+    if (box.bottom < 0 || box.top > window.innerHeight) return;
+    var mark = window.innerHeight * 0.62;   // the line a step must cross to count
+    var railTop = rail.getBoundingClientRect().top;
+    var reached = -1;
+
+    steps.forEach(function (step, i) {
+      var r = step.getBoundingClientRect();
+      var on = r.top < mark;
+      step.classList.toggle('is-on', on);
+      if (on) reached = i;
+    });
+
+    if (reached < 0) {
+      fill.style.height = '0px';
+      pip && pip.classList.remove('is-on');
+      return;
+    }
+
+    var last = steps[reached].getBoundingClientRect();
+    var y = Math.max(0, last.top + last.height / 2 - railTop);
+    fill.style.height = Math.min(y, rail.offsetHeight) + 'px';
+    if (pip) {
+      pip.style.top = Math.min(y, rail.offsetHeight) + 'px';
+      pip.classList.add('is-on');
+    }
+  }
+
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(frame);
+  }, { passive: true });
+  window.addEventListener('resize', frame);
+  frame();
+})();
+
+/* CEO message: the quote lights up word by word as it comes into view. */
+(function () {
+  var card = document.querySelector('.ceo__card');
+  if (!card) return;
+
+  var quote = card.querySelector('.ceo__quote');
+  if (!quote) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    card.classList.add('is-on');
+    return;
+  }
+
+  // Wrap each word so it can be timed, leaving the sentence intact for readers.
+  var words = quote.textContent.trim().split(/\s+/);
+  quote.textContent = '';
+  words.forEach(function (word, i) {
+    var span = document.createElement('span');
+    span.className = 'w';
+    span.style.setProperty('--i', i);
+    span.textContent = word;
+    quote.appendChild(span);
+    if (i < words.length - 1) quote.appendChild(document.createTextNode(' '));
+  });
+  quote.classList.add('is-split');
+  card.classList.add('is-armed');
+
+  if (!('IntersectionObserver' in window)) {
+    card.classList.add('is-on');
+    quote.classList.add('is-on');
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      card.classList.add('is-on');
+      quote.classList.add('is-on');
+      io.disconnect();
+    });
+  }, { threshold: 0.3 });
+
+  io.observe(card);
+})();
+
+/* About: the three cards arrive one after another and ink their icons in. */
+(function () {
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.pillar'));
+  if (!cards.length) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !('IntersectionObserver' in window)) {
+    cards.forEach(function (c) { c.classList.add('is-on'); });
+    return;
+  }
+
+  cards.forEach(function (c) { c.classList.add('is-armed'); });
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-on');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.25 });
+
+  cards.forEach(function (c) { io.observe(c); });
+})();
+
+/* About cards: open for detail, and lean slightly toward the pointer. */
+(function () {
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.pillar'));
+  if (!cards.length) return;
+
+  cards.forEach(function (card) {
+    var toggle = card.querySelector('.pillar__toggle');
+    var panel = card.querySelector('.pillar__panel');
+    if (!toggle || !panel) return;
+
+    panel.removeAttribute('hidden');
+    panel.style.height = '0px';
+    panel.style.transition = 'height .4s cubic-bezier(.22,.61,.36,1)';
+
+    toggle.addEventListener('click', function () {
+      var open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      card.classList.toggle('is-open', !open);
+      toggle.querySelector('.pillar__toggle-text').textContent = open ? 'Details' : 'Close';
+      panel.style.height = open ? '0px' : panel.scrollHeight + 'px';
+    });
+
+    window.addEventListener('resize', function () {
+      if (toggle.getAttribute('aria-expanded') === 'true') panel.style.height = panel.scrollHeight + 'px';
+    });
+  });
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  cards.forEach(function (card) {
+    var box = null, queued = false, rx = 0, ry = 0;
+
+    card.addEventListener('mouseenter', function () { box = card.getBoundingClientRect(); }, { passive: true });
+
+    card.addEventListener('mousemove', function (e) {
+      if (!box) return;
+      ry = ((e.clientX - box.left) / box.width - 0.5) * 5;   // degrees
+      rx = ((e.clientY - box.top) / box.height - 0.5) * -5;
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () {
+        queued = false;
+        card.style.transform =
+          'perspective(800px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateY(-4px)';
+      });
+    }, { passive: true });
+
+    card.addEventListener('mouseleave', function () {
+      box = null;
+      card.style.transform = '';
+    }, { passive: true });
+  });
+})();

@@ -1,0 +1,165 @@
+/* ==========================================================================
+   MS Logistics — animations.css
+   Reveals finish visible with or without JS. Scripts only sharpen the timing.
+   ========================================================================== */
+
+/* Loader --------------------------------------------------------------- */
+
+.loader{animation:loader-lift .5s var(--ease) 1.5s forwards}
+.loader__progress{animation:loader-fill 1.4s var(--ease) forwards}
+.loader__logo{animation:settle .6s var(--ease) both}
+.loader__text{animation:settle .6s var(--ease) .15s both}
+
+@keyframes loader-fill{from{width:0}to{width:100%}}
+@keyframes loader-lift{to{opacity:0;visibility:hidden}}
+@keyframes settle{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* Hero entrance -------------------------------------------------------- */
+
+.hero__title-accent{animation:rise .9s var(--ease) 1.65s both}
+.hero__typing{animation:rise .9s var(--ease) 1.75s both}
+.hero__desc{animation:rise .9s var(--ease) 1.85s both}
+.hero__buttons{animation:rise .9s var(--ease) 1.95s both}
+.hero__visual{animation:fade-in 1.1s var(--ease) 1.8s both}
+
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+
+.fade-up{animation:rise .8s var(--ease) both}
+.delay-2{animation-delay:1.85s}
+.delay-3{animation-delay:1.95s}
+.delay-4{animation-delay:2.05s}
+
+/* Scroll reveals -------------------------------------------------------
+   Without JS these run once on a timer and end visible. With the
+   `js-reveal` class on <html> or <body>, animation.js drives them instead.
+   ----------------------------------------------------------------------- */
+
+.reveal{animation:rise .8s var(--ease) 1.7s both}
+.reveal-left{animation:from-left .8s var(--ease) 1.7s both}
+.reveal-right{animation:from-right .8s var(--ease) 1.8s both}
+
+@keyframes from-left{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+@keyframes from-right{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+
+.js-reveal .reveal,
+.js-reveal .reveal-left,
+.js-reveal .reveal-right{
+  animation:none;opacity:0;
+  transition:opacity .8s var(--ease),transform .8s var(--ease);
+}
+.js-reveal .reveal{transform:translateY(20px)}
+.js-reveal .reveal-left{transform:translateX(-26px)}
+.js-reveal .reveal-right{transform:translateX(26px)}
+
+.js-reveal .reveal.is-visible,.js-reveal .reveal.visible,.js-reveal .reveal.active,
+.js-reveal .reveal-left.is-visible,.js-reveal .reveal-left.visible,.js-reveal .reveal-left.active,
+.js-reveal .reveal-right.is-visible,.js-reveal .reveal-right.visible,.js-reveal .reveal-right.active{
+  opacity:1;transform:none;
+}
+
+/* Manifest rows: the hairline draws in under each item ------------------ */
+
+.why__item{background-image:linear-gradient(var(--rule),var(--rule));background-repeat:no-repeat;background-position:0 100%;background-size:100% 1px}
+.why__item:nth-child(1){animation:rule-draw .9s var(--ease) 1.9s both}
+.why__item:nth-child(2){animation:rule-draw .9s var(--ease) 2s both}
+.why__item:nth-child(3){animation:rule-draw .9s var(--ease) 2.1s both}
+.why__item:nth-child(4){animation:rule-draw .9s var(--ease) 2.2s both}
+.why__item:nth-child(5){animation:rule-draw .9s var(--ease) 2.3s both}
+.why__item:nth-child(6){animation:rule-draw .9s var(--ease) 2.4s both}
+
+@keyframes rule-draw{
+  from{opacity:0;background-size:0 1px}
+  to{opacity:1;background-size:100% 1px}
+}
+
+.why__icon [data-draw]{stroke-dasharray:var(--len,120);stroke-dashoffset:var(--len,120);animation:draw-in 1s var(--ease) 2.1s forwards}
+@keyframes draw-in{to{stroke-dashoffset:0}}
+
+/* Clients marquee ------------------------------------------------------ */
+
+.clients__track{animation:marquee 46s linear infinite}
+.clients:hover .clients__track{animation-play-state:paused}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Hamburger ------------------------------------------------------------ */
+
+.header__hamburger.active span:nth-child(1),
+.header__hamburger.open span:nth-child(1),
+.header__hamburger.is-open span:nth-child(1),
+.header__hamburger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+
+.header__hamburger.active span:nth-child(2),
+.header__hamburger.open span:nth-child(2),
+.header__hamburger.is-open span:nth-child(2),
+.header__hamburger[aria-expanded="true"] span:nth-child(2){opacity:0}
+
+.header__hamburger.active span:nth-child(3),
+.header__hamburger.open span:nth-child(3),
+.header__hamburger.is-open span:nth-child(3),
+.header__hamburger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* Modal ---------------------------------------------------------------- */
+
+.modal:not([hidden]) .modal__backdrop{animation:fade-in .25s var(--ease) both}
+.modal:not([hidden]) .modal__content{animation:modal-in .3s var(--ease) both}
+@keyframes modal-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* Reduced motion ------------------------------------------------------- */
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  .reveal,.reveal-left,.reveal-right,.fade-up,
+  .js-reveal .reveal,.js-reveal .reveal-left,.js-reveal .reveal-right,
+  .hero__title-accent,.hero__typing,.hero__desc,.hero__buttons,.hero__visual,
+  .why__item{opacity:1;transform:none;background-size:100% 1px}
+  .why__icon [data-draw]{stroke-dasharray:none;stroke-dashoffset:0}
+  .clients__track{animation:none}
+}
+
+/* Manifest page -------------------------------------------------------- */
+
+.lede__title .line > span{display:block;animation:line-rise 1s var(--ease) both}
+.lede__title .line:nth-child(1) > span{animation-delay:1.6s}
+.lede__title .line:nth-child(2) > span{animation-delay:1.69s}
+@keyframes line-rise{from{transform:translateY(115%)}to{transform:none}}
+
+.lede__text{animation:rise .9s var(--ease) 1.95s both}
+.figures > div:nth-child(1){animation:rise .9s var(--ease) 2.1s both}
+.figures > div:nth-child(2){animation:rise .9s var(--ease) 2.2s both}
+.figures > div:nth-child(3){animation:rise .9s var(--ease) 2.3s both}
+
+.band__media .curtain{animation:curtain 1.15s var(--ease) 2.2s forwards}
+.band__media svg,.band__media img{animation:settle-scale 1.8s var(--ease) 2.2s both}
+@keyframes curtain{to{transform:scaleY(0)}}
+@keyframes settle-scale{from{transform:scale(1.06)}to{transform:none}}
+
+.row{animation:rise .8s var(--ease) both}
+.row::after{animation:rule-wipe .9s var(--ease) both}
+.row__mark{animation:mark-pop .5s var(--ease) both}
+.row [data-draw]{stroke-dasharray:var(--len,90);stroke-dashoffset:var(--len,90);animation:draw-in 1s var(--ease) forwards}
+.row,.row::after{animation-delay:calc(2.5s + var(--i,0) * 90ms)}
+.row__mark,.row [data-draw]{animation-delay:calc(2.7s + var(--i,0) * 90ms)}
+
+@keyframes rule-wipe{from{transform:scaleX(0)}to{transform:none}}
+@keyframes mark-pop{from{transform:scale(0)}to{transform:none}}
+
+.close__media [data-draw]{stroke-dasharray:var(--len,600);stroke-dashoffset:var(--len,600);animation:draw-in 1.6s var(--ease) 3.2s forwards}
+.close__inner{animation:rise .9s var(--ease) 3.3s both}
+
+@media (prefers-reduced-motion:reduce){
+  .lede__title .line > span,.lede__text,.figures > div,.row,.close__inner{opacity:1;transform:none}
+  .band__media .curtain{display:none}
+  .row::after,.row__mark{transform:none}
+  .row [data-draw],.close__media [data-draw]{stroke-dasharray:none;stroke-dashoffset:0}
+}
+
+/* Services deck ------------------------------------------------------- */
+
+.deck__card{transition:box-shadow .4s var(--ease)}
+.deck__card:hover{box-shadow:0 -1px 0 var(--ink)}

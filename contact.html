@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MS Logistics Private Limited. Nepal's trusted partner for packing, warehousing, and worldwide freight. Household relocation, diplomatic moves, customs clearance, and commercial logistics.">
+  <meta name="keywords" content="logistics Nepal, relocation Nepal, freight forwarding, warehousing, customs clearance, packing services, international household relocation, embassy relocation, corporate relocation, air freight, sea freight, MS Logistics, cargo Nepal, cross-border logistics">
+  <meta name="author" content="MS Logistics Private Limited">
+  <meta property="og:title" content="MS Logistics Private Limited | Packing, Warehousing & Worldwide Freight">
+  <meta property="og:description" content="Nepal's trusted partner for packing, warehousing, and worldwide freight. From a single-household move to institutional cargo, handled with precision, care, and zero-damage commitment.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="images/freight-containers.jpg">
+  <meta name="theme-color" content="#0B1F3A">
+  <title>Contact | MS Logistics Private Limited</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230B1F3A'/%3E%3Ctext x='50' y='68' font-family='Archivo,Arial' font-size='52' font-weight='800' fill='white' text-anchor='middle'%3EMS%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="page-inner">
+
+  <!-- Loading Screen -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <div class="loader__logo">MS<span>Logistics</span></div>
+      <div class="loader__bar">
+        <div class="loader__progress" id="loaderProgress"></div>
+      </div>
+      <p class="loader__text">Moving With Precision...</p>
+    </div>
+  </div>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Page scroll progress"></div>
+
+  <!-- Header -->
+  <header class="header" id="header" role="banner">
+    <div class="container header__container">
+      <a href="index.html" class="header__logo" aria-label="MS Logistics Private Limited Home">
+        <span class="header__logo-icon">&#9670;</span>
+        MS<span>Logistics</span>
+      </a>
+      <nav class="header__nav" id="mainNav" role="navigation" aria-label="Main navigation">
+        <ul class="header__menu">
+          <li><a href="index.html" class="header__link">Home</a></li>
+          <li><a href="about-us.html" class="header__link">About Us</a></li>
+          <li><a href="services.html" class="header__link">Services</a></li>
+          <li><a href="why-choose-us.html" class="header__link">Why Choose Us</a></li>
+          <li><a href="clients.html" class="header__link">Clients</a></li>
+          <li><a href="gallery.html" class="header__link">Gallery</a></li>
+          <li><a href="contact.html" class="header__link active">Contact</a></li>
+        </ul>
+      </nav>
+      <a href="contact.html" class="btn btn--primary header__cta">Work With Us</a>
+      <button class="header__hamburger" id="hamburgerBtn" aria-label="Toggle menu" aria-expanded="false" aria-controls="mainNav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+
+
+  <main id="main">
+
+    <section class="lede">
+      <div class="container grid12">
+        <div class="lede__head">
+          <h1 class="lede__title">
+            <span class="line"><span>Tell us what</span></span>
+            <span class="line"><span>you're moving.</span></span>
+          </h1>
+        </div>
+        <div class="lede__aside">
+          <p class="lede__text">Send the scope, the destination and your timeline. We respond within 24 hours, at any hour.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="manifest" id="contact">
+      <div class="container grid12">
+        <div class="contact__details">
+          <div class="contact__item">
+            <h3>Head office</h3>
+            <p>New Baneshwor, Kathmandu, Nepal</p>
+          </div>
+          <div class="contact__item">
+            <h3>Hub</h3>
+            <p>Balkumari, Lalitpur, Nepal</p>
+          </div>
+          <div class="contact__item">
+            <h3>Phone</h3>
+            <p><a href="tel:+9779801812221">+977-9801812221</a><br><a href="tel:+9779840267963">+977-9840267963</a></p>
+          </div>
+          <div class="contact__item">
+            <h3>Email</h3>
+            <p><a href="mailto:mslogistic145@gmail.com">mslogistic145@gmail.com</a></p>
+          </div>
+          <div class="contact__item">
+            <h3>Response guarantee</h3>
+            <p>24/7 coordination and support</p>
+          </div>
+        </div>
+        <div class="contact__formwrap">
+          <form class="contact__form" id="contactForm" novalidate>
+            <div class="form__group">
+              <label for="name">Full name *</label>
+              <input type="text" id="name" name="name" required autocomplete="name" placeholder="John Doe">
+              <span class="form__error" id="nameError"></span>
+            </div>
+            <div class="form__group">
+              <label for="email">Email address *</label>
+              <input type="email" id="email" name="email" required autocomplete="email" placeholder="john@example.com">
+              <span class="form__error" id="emailError"></span>
+            </div>
+            <div class="form__group">
+              <label for="phone">Phone number</label>
+              <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="+977-98XXXXXXXX">
+              <span class="form__error" id="phoneError"></span>
+            </div>
+            <div class="form__row">
+              <div class="form__group">
+                <label for="service">Service *</label>
+                <select id="service" name="service" required>
+                  <option value="">Select a service</option>
+                  <option value="residential">Residential relocation</option>
+                  <option value="international">International household relocation</option>
+                  <option value="embassy">Embassy and diplomatic relocation</option>
+                  <option value="corporate">Corporate and office relocation</option>
+                  <option value="air-freight">Air freight services</option>
+                  <option value="sea-freight">Sea freight services</option>
+                  <option value="customs">Customs documentation and clearance</option>
+                  <option value="warehousing">Secure warehousing and storage</option>
+                  <option value="export-packing">Professional export packing</option>
+                  <option value="door-to-door">Door-to-door relocation management</option>
+                </select>
+                <span class="form__error" id="serviceError"></span>
+              </div>
+              <div class="form__group">
+                <label for="budget">Shipment type</label>
+                <select id="budget" name="budget">
+                  <option value="">Select type</option>
+                  <option value="domestic">Domestic (Nepal)</option>
+                  <option value="india">India</option>
+                  <option value="air">Global air freight</option>
+                  <option value="sea">Ocean freight</option>
+                </select>
+              </div>
+            </div>
+            <div class="form__group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="5" required placeholder="Tell us about your shipment"></textarea>
+              <span class="form__error" id="messageError"></span>
+            </div>
+            <button type="submit" class="btn btn--primary btn--full">Send message</button>
+            <div class="form__success" id="formSuccess" hidden>
+              <p>Thank you. Your message has been sent. We'll get back to you within 24 hours.</p>
+            </div>
+          </form>
+        </div>
+        <div class="mapband">
+          <iframe src="https://maps.google.com/maps?q=New+Baneshwor+Kathmandu+Nepal&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=&amp;output=embed" title="MS Logistics head office location" loading="lazy" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__col">
+          <a href="index.html" class="footer__logo">MS<span>Logistics</span></a>
+          <p class="footer__desc">Nepal's trusted partner for packing, warehousing, and worldwide freight. Moving with precision and zero-damage commitment for over 10 years.</p>
+          <div class="footer__social">
+            <a href="#" aria-label="Facebook">f</a>
+            <a href="#" aria-label="Instagram">ig</a>
+            <a href="#" aria-label="LinkedIn">in</a>
+            <a href="#" aria-label="Twitter">X</a>
+          </div>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__title">Quick Links</h4>
+          <ul class="footer__links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about-us.html">About Us</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="why-choose-us.html">Why Choose Us</a></li>
+            <li><a href="clients.html">Clients</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__title">Services</h4>
+          <ul class="footer__links">
+            <li><a href="services.html">Residential</a></li>
+            <li><a href="services.html">International Household Relocation</a></li>
+            <li><a href="services.html">Embassy &amp; Diplomatic Relocation</a></li>
+            <li><a href="services.html">Air &amp; Sea Freight</a></li>
+            <li><a href="services.html">Customs Clearance</a></li>
+            <li><a href="services.html">Secure Warehousing</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__title">Newsletter</h4>
+          <p class="footer__newsletter-text">Subscribe for logistics updates and service news.</p>
+          <form class="footer__newsletter" id="newsletterForm">
+            <input type="email" placeholder="Your email" aria-label="Email for newsletter" required>
+            <button type="submit" aria-label="Subscribe">&#8594;</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2026 MS Logistics Private Limited. All rights reserved.</p>
+        <button class="footer__top" id="backToTop" aria-label="Back to top">Back To Top &#8593;</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/animation.js" defer></script>
+  <script src="js/interact.js" defer></script>
+  <script src="js/enhance.js" defer></script>
+</body>
+</html>

@@ -167,3 +167,14 @@
 @media (max-width:640px){ .pillars__row{grid-template-columns:minmax(0,1fr)} }
 
 @media (max-width:1024px){ .lede__head--center{grid-column:1/13} }
+
+@media (max-width:820px){
+  .ceo__card{grid-template-columns:minmax(0,1fr)}
+  .ceo__photo{aspect-ratio:16/10;max-height:320px}
+}
+
+@media (max-width:820px){
+  .deck__list--grid{grid-template-columns:minmax(0,1fr)}
+  .picked__inner{flex-wrap:wrap;gap:.6rem}
+  .picked__go{width:100%;margin-left:0}
+}

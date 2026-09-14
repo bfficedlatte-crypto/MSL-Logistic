@@ -874,3 +874,153 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .footer__logo span{font-weight:700;color:var(--gold-light)}
 .loader__logo{font-weight:700}
 .loader__logo span{font-weight:700;color:var(--gold-light)}
+
+/* CEO card with portrait ------------------------------------------------ */
+
+.ceo__card{
+  display:grid;grid-template-columns:minmax(0,.42fr) minmax(0,1fr);
+  gap:clamp(1.5rem,3vw,2.75rem);align-items:center;
+}
+.ceo__photo{position:relative;aspect-ratio:4/5;background:var(--field);overflow:hidden}
+.ceo__photo::after{
+  content:"images/ceo.jpg";position:absolute;inset:0;display:grid;place-items:center;
+  font-size:.75rem;color:var(--ink-45);
+}
+.ceo__photo img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover}
+.ceo__body{min-width:0}
+
+/* Gallery motion and interaction ---------------------------------------- */
+
+.project-card{transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.js-gal .project-card{opacity:0;transform:translateY(22px)}
+.js-gal .project-card.is-in{opacity:1;transform:none}
+.js-gal .project-card.is-out{opacity:0;transform:scale(.96);pointer-events:none}
+
+.project-card__image{cursor:zoom-in}
+.project-card__image::after{
+  content:"";position:absolute;inset:0;background:rgba(11,31,58,.22);
+  opacity:0;transition:opacity .35s var(--ease);
+}
+.project-card:hover .project-card__image::after,
+.project-card__image:focus-visible::after{opacity:1}
+.project-card__zoom{
+  position:absolute;left:50%;top:50%;z-index:2;
+  display:grid;place-items:center;width:52px;height:52px;margin:-26px 0 0 -26px;
+  background:var(--signal);color:var(--ink);font-size:1.25rem;line-height:1;
+  opacity:0;transform:scale(.8);transition:opacity .3s var(--ease),transform .35s var(--ease);
+  pointer-events:none;
+}
+.project-card:hover .project-card__zoom,
+.project-card__image:focus-visible .project-card__zoom{opacity:1;transform:none}
+.project-card__image:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+.projects__filter{position:relative}
+.projects__filter::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--ink);
+  transform:scaleX(0);transform-origin:right;transition:transform .3s var(--ease);
+}
+.projects__filter:hover::after{transform:scaleX(1);transform-origin:left}
+.projects__filter.active{box-shadow:none}
+.projects__filter.active::after{transform:scaleX(1);background:var(--signal);height:2px}
+
+.modal__figure{position:relative}
+.modal__figure img{transition:opacity .3s var(--ease)}
+.modal__figure.is-swapping img{opacity:0}
+/* An image whose file is missing leaves its frame in place */
+img.is-missing{visibility:hidden}
+
+/* Lightbox thumbnails ---------------------------------------------------- */
+
+.modal__figure{cursor:grab;user-select:none}
+.modal__figure:active{cursor:grabbing}
+.modal__thumbs{display:flex;flex-wrap:wrap;gap:.5rem;padding-top:1rem;border-top:1px solid var(--rule)}
+.modal__thumb{
+  width:64px;height:48px;padding:0;overflow:hidden;background:var(--field);
+  border:1px solid var(--rule);opacity:.55;
+  transition:opacity .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease);
+}
+.modal__thumb img{width:100%;height:100%;object-fit:cover}
+.modal__thumb:hover{opacity:1;transform:translateY(-2px)}
+.modal__thumb.is-on{opacity:1;border-color:var(--signal);border-width:2px}
+
+/* Services deck: plain stacked cards, no sticky shuffle ------------------ */
+
+.deck__list{display:grid;gap:var(--gutter)}
+.deck__card{
+  position:static;
+  top:auto;
+  margin-bottom:0;
+  transform:none;
+  opacity:1;
+  transition:border-color .3s var(--ease);
+}
+.deck__card:hover{border-color:var(--ink);box-shadow:none}
+.deck__body{opacity:1}
+
+/* Services toolbar, selection and views --------------------------------- */
+
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.tools{grid-column:1/13;display:grid;gap:1rem;margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:1px solid var(--ink)}
+.tools__search input{
+  width:100%;max-width:520px;padding:.8rem 1rem;font:inherit;font-size:.9375rem;
+  color:var(--ink);background:var(--object);border:1px solid var(--rule);
+  transition:border-color .2s var(--ease);
+}
+.tools__search input:focus{outline:none;border-color:var(--ink)}
+.tools__search input::placeholder{color:var(--ink-45)}
+.tools__tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.tools__tag{
+  padding:.35rem .8rem;border:1px solid var(--rule);background:var(--object);
+  font-size:.75rem;color:var(--ink-70);
+  transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease);
+}
+.tools__tag:hover{border-color:var(--ink)}
+.tools__tag.is-on{background:var(--ink);border-color:var(--ink);color:#fff}
+.tools__meta{display:flex;align-items:center;gap:1rem}
+.tools__count{font-size:.8125rem;color:var(--ink-45)}
+.tools__view{
+  margin-left:auto;padding:.4rem .9rem;border:1px solid var(--rule);
+  font-size:.75rem;font-weight:500;transition:border-color .2s var(--ease)
+}
+.tools__view:hover{border-color:var(--ink)}
+.tools__view[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.deck__card{transition:opacity .35s var(--ease),transform .35s var(--ease),border-color .3s var(--ease)}
+.deck__card.is-hidden{display:none}
+.deck__card.is-picked{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--signal)}
+
+.deck__pick{
+  display:inline-flex;align-items:center;gap:.6rem;margin-top:1.25rem;
+  padding:.55rem .9rem;border:1px solid var(--rule);font-size:.8125rem;font-weight:500;
+  transition:border-color .2s var(--ease),background .2s var(--ease);
+}
+.deck__pick:hover{border-color:var(--ink)}
+.deck__pick-box{width:14px;height:14px;border:1px solid var(--ink-45);position:relative}
+.deck__pick[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.deck__pick[aria-pressed="true"] .deck__pick-box{background:var(--signal);border-color:var(--signal)}
+.deck__pick[aria-pressed="true"] .deck__pick-box::after{
+  content:"";position:absolute;left:4px;top:1px;width:4px;height:8px;
+  border:solid var(--ink);border-width:0 1.5px 1.5px 0;transform:rotate(45deg);
+}
+
+/* Grid view flips the cards to image on top */
+.deck__list--grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.deck__list--grid .deck__card{grid-template-columns:minmax(0,1fr)}
+.deck__list--grid .deck__media{aspect-ratio:16/9}
+
+.svc-empty{grid-column:1/13;padding:2.5rem 0;font-size:.9375rem;color:var(--ink-45)}
+
+/* Selection bar */
+.picked{position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--ink);color:#fff;
+  transform:translateY(100%);transition:transform .35s var(--ease)}
+.picked.is-up{transform:none}
+.picked[hidden]{display:block}
+.picked__inner{display:flex;align-items:center;gap:1rem;padding-block:.9rem}
+.picked__count{font-size:.875rem;font-weight:500}
+.picked__clear{font-size:.8125rem;color:#8FA1B8}
+.picked__clear:hover{color:#fff}
+.picked__go{margin-left:auto;background:var(--signal);color:var(--ink);border-color:var(--signal)}
+.picked__go:hover{background:#fff}
+/* Centred hero also centres the typewriter line */
+.lede__head--center .type-line{justify-content:center}

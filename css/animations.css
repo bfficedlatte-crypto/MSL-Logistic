@@ -230,3 +230,5 @@
 }
 .lede__kicker{animation:rise .8s var(--ease) 1.5s both}
 @media (prefers-reduced-motion:reduce){ .lede__kicker{opacity:1;transform:none} }
+.ceo__card.is-armed .ceo__photo img{opacity:0;transform:scale(1.04);transition:opacity .8s var(--ease),transform 1.2s var(--ease)}
+.ceo__card.is-armed.is-on .ceo__photo img{opacity:1;transform:none}

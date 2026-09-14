@@ -3,22 +3,16 @@
 (function () {
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* --- Gallery: filter count, lightbox with arrows, keys and swipe ------ */
+  /* --- Gallery: lightbox with thumbnails, swipe and shareable links ---- */
 
   var cards = Array.prototype.slice.call(document.querySelectorAll('.project-card'));
   var filters = document.querySelector('.projects__filters');
 
-  if (cards.length && filters) {
+  if (cards.length && filters && !filters.querySelector('.projects__count')) {
     var count = document.createElement('span');
     count.className = 'projects__count';
+    count.textContent = cards.length + ' projects';
     filters.appendChild(count);
-
-    var tally = function () {
-      var shown = cards.filter(function (c) { return c.style.display !== 'none'; }).length;
-      count.textContent = shown + (shown === 1 ? ' project' : ' projects');
-    };
-    tally();
-    filters.addEventListener('click', function () { setTimeout(tally, 0); });
   }
 
   var modal = document.getElementById('projectModal');
@@ -31,61 +25,109 @@
       return cards.filter(function (c) { return c.style.display !== 'none'; });
     }
 
-    function render() {
+    function detailsOf(card) {
+      var img = card.querySelector('img');
+      var o = card.querySelector('.project-card__overlay');
+      var t = card.querySelector('.project-card__title');
+      return {
+        src: img ? img.getAttribute('src') : '',
+        alt: img ? (img.alt || '') : '',
+        title: t ? t.textContent : 'Project',
+        html: o ? o.innerHTML.replace(/<button[\s\S]*?<\/button>/, '') : ''
+      };
+    }
+
+    function render(swap) {
       var list = visible();
       if (!list.length) return;
       at = (at + list.length) % list.length;
-      var card = list[at];
-      var img = card.querySelector('img');
-      var o = card.querySelector('.project-card__overlay');
+      var d = detailsOf(list[at]);
+
+      var thumbs = list.map(function (c, i) {
+        var td = detailsOf(c);
+        return '<button type="button" class="modal__thumb' + (i === at ? ' is-on' : '') +
+               '" data-go="' + i + '" aria-label="' + td.title + '"' +
+               (i === at ? ' aria-current="true"' : '') + '>' +
+               (td.src ? '<img src="' + td.src + '" alt="" loading="lazy">' : '') + '</button>';
+      }).join('');
 
       body.innerHTML =
-        '<div class="modal__figure"><img src="' + img.getAttribute('src') + '" alt="' + img.alt + '"></div>' +
-        '<div>' + o.innerHTML.replace(/<button[\s\S]*?<\/button>/, '') + '</div>' +
+        '<div class="modal__figure' + (swap ? ' is-swapping' : '') + '">' +
+          (d.src ? '<img src="' + d.src + '" alt="' + d.alt + '" draggable="false">' : '') +
+        '</div>' +
+        '<div>' + d.html + '</div>' +
         '<div class="modal__nav">' +
           '<button type="button" data-step="-1" aria-label="Previous project">&larr;</button>' +
           '<button type="button" data-step="1" aria-label="Next project">&rarr;</button>' +
           '<span>' + (at + 1) + ' of ' + list.length + '</span>' +
-        '</div>';
+        '</div>' +
+        '<div class="modal__thumbs">' + thumbs + '</div>';
+
+      var fig = body.querySelector('.modal__figure');
+      if (swap) requestAnimationFrame(function () { fig.classList.remove('is-swapping'); });
 
       body.querySelectorAll('[data-step]').forEach(function (b) {
-        b.addEventListener('click', function () { at += parseInt(b.dataset.step, 10); render(); });
+        b.addEventListener('click', function () { at += parseInt(b.dataset.step, 10); render(true); });
       });
+      body.querySelectorAll('[data-go]').forEach(function (b) {
+        b.addEventListener('click', function () { at = parseInt(b.dataset.go, 10); render(true); });
+      });
+
+      // Drag or swipe the picture to move through the set.
+      var x0 = null;
+      function down(x) { x0 = x; }
+      function up(x) {
+        if (x0 === null) return;
+        var dx = x - x0; x0 = null;
+        if (Math.abs(dx) > 50) { at += dx < 0 ? 1 : -1; render(true); }
+      }
+      fig.addEventListener('mousedown', function (e) { e.preventDefault(); down(e.clientX); });
+      fig.addEventListener('mouseup', function (e) { up(e.clientX); });
+      fig.addEventListener('touchstart', function (e) { down(e.touches[0].clientX); }, { passive: true });
+      fig.addEventListener('touchend', function (e) { up(e.changedTouches[0].clientX); });
+
+      if (history.replaceState) history.replaceState(null, '', '#p' + (at + 1));
     }
 
     function open(card) {
       at = visible().indexOf(card);
-      render();
+      render(false);
       modal.hidden = false;
       document.body.style.overflow = 'hidden';
       var close = document.getElementById('projectModalClose');
-      close && close.focus();
+      if (close) close.focus();
     }
 
     function shut() {
       modal.hidden = true;
       document.body.style.overflow = '';
+      if (history.replaceState) history.replaceState(null, '', location.pathname);
     }
 
     cards.forEach(function (card) {
       var btn = card.querySelector('.project-card__btn');
-      btn && btn.addEventListener('click', function (e) {
-        e.stopImmediatePropagation();
-        open(card);
-      }, true);
+      if (btn) btn.addEventListener('click', function (e) { e.stopImmediatePropagation(); open(card); }, true);
     });
 
     ['projectModalClose', 'projectModalBackdrop'].forEach(function (id) {
       var el = document.getElementById(id);
-      el && el.addEventListener('click', shut);
+      if (el) el.addEventListener('click', shut);
     });
 
     document.addEventListener('keydown', function (e) {
       if (modal.hidden) return;
       if (e.key === 'Escape') shut();
-      if (e.key === 'ArrowRight') { at += 1; render(); }
-      if (e.key === 'ArrowLeft') { at -= 1; render(); }
+      if (e.key === 'ArrowRight') { at += 1; render(true); }
+      if (e.key === 'ArrowLeft') { at -= 1; render(true); }
     });
+
+    // A link like gallery.html#p3 opens that project straight away.
+    var hash = (location.hash || '').match(/^#p(\d+)$/);
+    if (hash) {
+      var idx = parseInt(hash[1], 10) - 1;
+      var list0 = visible();
+      if (list0[idx]) open(list0[idx]);
+    }
   }
 
   /* --- Testimonials: drag, keys, autoplay that yields to the visitor ---- */
@@ -555,4 +597,238 @@
   setTimeout(function () {
     nums.forEach(function (n) { if (n.textContent.trim() === '0') { run(n); io.unobserve(n); } });
   }, 2000);
+})();
+
+/* Gallery: staggered arrival, animated filtering, click anywhere to open. */
+(function () {
+  var grid = document.getElementById('projectsGrid');
+  if (!grid) return;
+
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.project-card'));
+  var filters = Array.prototype.slice.call(document.querySelectorAll('.projects__filter'));
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // A magnifier badge, and the whole image opens the lightbox.
+  cards.forEach(function (card) {
+    var frame = card.querySelector('.project-card__image');
+    var btn = card.querySelector('.project-card__btn');
+    if (!frame || !btn) return;
+
+    var zoom = document.createElement('span');
+    zoom.className = 'project-card__zoom';
+    zoom.setAttribute('aria-hidden', 'true');
+    zoom.textContent = '+';
+    frame.appendChild(zoom);
+
+    frame.setAttribute('tabindex', '0');
+    frame.setAttribute('role', 'button');
+    var titleEl = card.querySelector('.project-card__title');
+    frame.setAttribute('aria-label', 'Open ' + (titleEl ? titleEl.textContent : 'project') + ' details');
+    frame.addEventListener('click', function () { btn.click(); });
+    frame.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+    });
+  });
+
+  if (still) { cards.forEach(function (c) { c.classList.add('is-in'); }); }
+  else {
+    document.documentElement.classList.add('js-gal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var i = cards.indexOf(e.target);
+          e.target.style.transitionDelay = (Math.max(i, 0) % 3) * 110 + 'ms';
+          e.target.classList.add('is-in');
+          io.unobserve(e.target);
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+      cards.forEach(function (c) { io.observe(c); });
+    } else {
+      cards.forEach(function (c) { c.classList.add('is-in'); });
+    }
+  }
+
+  // Take over filtering so cards fade out and back in rather than snapping.
+  filters.forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopImmediatePropagation();
+
+      filters.forEach(function (b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+
+      var want = btn.getAttribute('data-filter');
+      var keep = cards.filter(function (c) {
+        return want === 'all' || (c.getAttribute('data-category') || '').indexOf(want) > -1;
+      });
+
+      cards.forEach(function (c) {
+        if (keep.indexOf(c) > -1) return;
+        c.classList.add('is-out');
+        setTimeout(function () { if (c.classList.contains('is-out')) c.style.display = 'none'; }, still ? 0 : 300);
+      });
+
+      keep.forEach(function (c, i) {
+        c.style.display = '';
+        c.classList.remove('is-out');
+        c.style.transitionDelay = still ? '0ms' : (i % 3) * 90 + 'ms';
+        c.classList.add('is-in');
+      });
+
+      var count = document.querySelector('.projects__count');
+      if (count) count.textContent = keep.length + (keep.length === 1 ? ' project' : ' projects');
+    }, true);
+  });
+})();
+
+/* Services: search, tag filters, view switch and an enquiry basket. */
+(function () {
+  var list = document.getElementById('svcList');
+  if (!list) return;
+
+  var cards = Array.prototype.slice.call(list.querySelectorAll('.deck__card'));
+  var search = document.getElementById('svcSearch');
+  var tagWrap = document.getElementById('svcTags');
+  var countEl = document.getElementById('svcCount');
+  var viewBtn = document.getElementById('svcView');
+  var bar = document.getElementById('svcBar');
+  var barCount = document.getElementById('svcBarCount');
+  var clearBtn = document.getElementById('svcClear');
+  var goLink = document.getElementById('svcGo');
+
+  var picked = [];
+  var activeTag = null;
+
+  /* Build the tag filters from the cards themselves. */
+  var seen = [];
+  cards.forEach(function (c) {
+    (c.getAttribute('data-tags') || '').split('|').forEach(function (t) {
+      if (t && seen.indexOf(t) === -1) seen.push(t);
+    });
+  });
+
+  if (tagWrap) {
+    seen.forEach(function (t) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'tools__tag';
+      b.textContent = t;
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () {
+        activeTag = activeTag === t ? null : t;
+        Array.prototype.forEach.call(tagWrap.children, function (x) {
+          var on = x.textContent === activeTag;
+          x.classList.toggle('is-on', on);
+          x.setAttribute('aria-pressed', String(on));
+        });
+        apply();
+      });
+      tagWrap.appendChild(b);
+    });
+  }
+
+  var empty = document.createElement('p');
+  empty.className = 'svc-empty';
+  empty.hidden = true;
+  empty.textContent = 'No services match that. Try another word, or clear the filter.';
+  list.parentNode.insertBefore(empty, list.nextSibling);
+
+  function apply() {
+    var q = (search && search.value || '').trim().toLowerCase();
+    var shown = 0;
+
+    cards.forEach(function (c) {
+      var hay = (c.getAttribute('data-name') + ' ' + c.getAttribute('data-tags') + ' ' +
+                 (c.querySelector('.deck__desc') || {}).textContent).toLowerCase();
+      var okText = !q || hay.indexOf(q) > -1;
+      var okTag = !activeTag || (c.getAttribute('data-tags') || '').split('|').indexOf(activeTag) > -1;
+      var on = okText && okTag;
+      c.classList.toggle('is-hidden', !on);
+      if (on) shown++;
+    });
+
+    if (countEl) countEl.textContent = shown + (shown === 1 ? ' service' : ' services');
+    empty.hidden = shown !== 0;
+  }
+
+  if (search) search.addEventListener('input', apply);
+
+  if (viewBtn) {
+    viewBtn.addEventListener('click', function () {
+      var grid = list.classList.toggle('deck__list--grid');
+      viewBtn.setAttribute('aria-pressed', String(grid));
+      viewBtn.textContent = grid ? 'List view' : 'Grid view';
+    });
+  }
+
+  /* Basket: pick services, then carry them into the enquiry form. */
+  function refreshBar() {
+    if (!bar) return;
+    if (barCount) barCount.textContent = picked.length + (picked.length === 1 ? ' service selected' : ' services selected');
+    bar.classList.toggle('is-up', picked.length > 0);
+    if (goLink) {
+      goLink.href = picked.length
+        ? 'contact.html?services=' + encodeURIComponent(picked.join(', ')) + '#contactForm'
+        : 'contact.html#contactForm';
+    }
+  }
+
+  list.addEventListener('click', function (e) {
+    var btn = e.target.closest('.deck__pick');
+    if (!btn) return;
+    var name = btn.getAttribute('data-service');
+    var card = btn.closest('.deck__card');
+    var on = picked.indexOf(name) === -1;
+
+    if (on) picked.push(name);
+    else picked.splice(picked.indexOf(name), 1);
+
+    btn.setAttribute('aria-pressed', String(on));
+    btn.querySelector('.deck__pick-text').textContent = on ? 'Added' : 'Add to enquiry';
+    if (card) card.classList.toggle('is-picked', on);
+    refreshBar();
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      picked = [];
+      cards.forEach(function (c) {
+        c.classList.remove('is-picked');
+        var b = c.querySelector('.deck__pick');
+        if (b) { b.setAttribute('aria-pressed', 'false'); b.querySelector('.deck__pick-text').textContent = 'Add to enquiry'; }
+      });
+      refreshBar();
+    });
+  }
+
+  apply();
+  refreshBar();
+})();
+
+/* Contact form picks up services chosen on the services page. */
+(function () {
+  var form = document.getElementById('contactForm');
+  if (!form || !location.search) return;
+
+  var m = location.search.match(/[?&]services=([^&]+)/);
+  if (!m) return;
+
+  var names = decodeURIComponent(m[1].replace(/\+/g, ' '));
+  var msg = form.querySelector('#message');
+  var select = form.querySelector('#service');
+
+  if (msg && !msg.value) {
+    msg.value = 'I would like a quote for: ' + names + '.\n\n';
+    msg.dispatchEvent(new Event('input'));
+  }
+
+  if (select) {
+    var first = names.split(',')[0].trim().toLowerCase();
+    Array.prototype.forEach.call(select.options, function (o) {
+      if (o.value && first.indexOf(o.textContent.trim().toLowerCase().split(' ')[0]) > -1) {
+        select.value = o.value;
+      }
+    });
+  }
 })();

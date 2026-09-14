@@ -80,95 +80,146 @@
 
     <section class="manifest" id="services">
       <div class="container grid12">
-        <div class="deck__list">
-          <article class="deck__card" style="--i:0">
+        <div class="tools">
+          <label class="tools__search">
+            <span class="sr-only">Search services</span>
+            <input type="search" id="svcSearch" placeholder="Search services, for example customs or packing" autocomplete="off">
+          </label>
+          <div class="tools__tags" id="svcTags" role="group" aria-label="Filter by type"></div>
+          <div class="tools__meta">
+            <span class="tools__count" id="svcCount"></span>
+            <button type="button" class="tools__view" id="svcView" aria-pressed="false">Grid view</button>
+          </div>
+        </div>
+        <div class="deck__list" id="svcList">
+          <article class="deck__card" data-name="Residential Relocation" data-tags="Residential|Door-to-Door" style="--i:0">
             <div class="deck__media"><img src="images/relocation-packing-v2.jpg" alt="Residential Relocation" loading="lazy" decoding="async"></div>
             <div class="deck__body">
               <span class="deck__index">01</span>
               <h2 class="deck__title">Residential Relocation</h2>
               <p class="deck__desc">Moving to a new home should be an exciting experience, not a stressful one. At MS Logistics, we provide professional residential relocation services that ensure your household belongings are packed, transported, and delivered safely.</p>
               <div class="deck__tags"><span>Residential</span><span>Door-to-Door</span></div>
+              <button type="button" class="deck__pick" aria-pressed="false" data-service="Residential Relocation">
+                <span class="deck__pick-box" aria-hidden="true"></span>
+                <span class="deck__pick-text">Add to enquiry</span>
+              </button>
             </div>
           </article>
-          <article class="deck__card" style="--i:1">
+          <article class="deck__card" data-name="International Household Relocation" data-tags="International|Global Relocation" style="--i:1">
             <div class="deck__media"><img src="images/freight-containers.jpg" alt="International Household Relocation" loading="lazy" decoding="async"></div>
             <div class="deck__body">
               <span class="deck__index">02</span>
               <h2 class="deck__title">International Household Relocation</h2>
               <p class="deck__desc">Relocating overseas requires careful planning and expert coordination. MS Logistics provides complete international household relocation services, managing everything from export-quality packing and freight arrangements to customs documentation support.</p>
               <div class="deck__tags"><span>International</span><span>Global Relocation</span></div>
+              <button type="button" class="deck__pick" aria-pressed="false" data-service="International Household Relocation">
+                <span class="deck__pick-box" aria-hidden="true"></span>
+                <span class="deck__pick-text">Add to enquiry</span>
+              </button>
             </div>
           </article>
-          <article class="deck__card" style="--i:2">
+          <article class="deck__card" data-name="Embassy and Diplomatic Relocation" data-tags="Diplomatic|Confidential Handling" style="--i:2">
             <div class="deck__media"><img src="images/relocation-packing-v2.jpg" alt="Embassy and Diplomatic Relocation" loading="lazy" decoding="async"></div>
             <div class="deck__body">
               <span class="deck__index">03</span>
               <h2 class="deck__title">Embassy and Diplomatic Relocation</h2>
               <p class="deck__desc">MS Logistics specialises in relocation services for embassies, diplomatic missions, international organisations, and expatriate professionals. We understand the importance of confidentiality, precision, and timely execution.</p>
               <div class="deck__tags"><span>Diplomatic</span><span>Confidential Handling</span></div>
+              <button type="button" class="deck__pick" aria-pressed="false" data-service="Embassy and Diplomatic Relocation">
+                <span class="deck__pick-box" aria-hidden="true"></span>
+                <span class="deck__pick-text">Add to enquiry</span>
+              </button>
             </div>
           </article>
-          <article class="deck__card" style="--i:3">
+          <article class="deck__card" data-name="Corporate and Office Relocation" data-tags="Corporate|Office Relocation" style="--i:3">
             <div class="deck__media"><img src="images/relocation-packing-v2.jpg" alt="Corporate and Office Relocation" loading="lazy" decoding="async"></div>
             <div class="deck__body">
               <span class="deck__index">04</span>
               <h2 class="deck__title">Corporate and Office Relocation</h2>
               <p class="deck__desc">We help businesses relocate efficiently with minimal disruption to daily operations. From offices and corporate headquarters to institutional facilities, our team carefully plans and manages every aspect of the move.</p>
               <div class="deck__tags"><span>Corporate</span><span>Office Relocation</span></div>
+              <button type="button" class="deck__pick" aria-pressed="false" data-service="Corporate and Office Relocation">
+                <span class="deck__pick-box" aria-hidden="true"></span>
+                <span class="deck__pick-text">Add to enquiry</span>
+              </button>
             </div>
           </article>
-          <article class="deck__card" style="--i:4">
+          <article class="deck__card" data-name="Air Freight Services" data-tags="Freight|Air Cargo" style="--i:4">
             <div class="deck__media"><img src="images/air-freight-v2.jpg" alt="Air Freight Services" loading="lazy" decoding="async"></div>
             <div class="deck__body">
               <span class="deck__index">05</span>
               <h2 class="deck__title">Air Freight Services</h2>
               <p class="deck__desc">Our air freight services are ideal for clients who require fast, secure, and reliable international transportation of household goods. Every shipment is professionally packed, documented, and coordinated.</p>
               <div class="deck__tags"><span>Freight</span><span>Air Cargo</span></div>
+              <button type="button" class="deck__pick" aria-pressed="false" data-service="Air Freight Services">
+                <span class="deck__pick-box" aria-hidden="true"></span>
+                <span class="deck__pick-text">Add to enquiry</span>
+              </button>
             </div>
           </article>
-          <article class="deck__card" style="--i:5">
+          <article class="deck__card" data-name="Sea Freight Services" data-tags="Freight|Sea Cargo" style="--i:5">
             <div class="deck__media"><img src="images/freight-containers.jpg" alt="Sea Freight Services" loading="lazy" decoding="async"></div>
             <div class="deck__body">
               <span class="deck__index">06</span>
               <h2 class="deck__title">Sea Freight Services</h2>
               <p class="deck__desc">Sea freight is a cost-effective solution for medium and large international household shipments. We provide complete sea freight management, including export packing, container booking, and documentation support.</p>
               <div class="deck__tags"><span>Freight</span><span>Sea Cargo</span></div>
+              <button type="button" class="deck__pick" aria-pressed="false" data-service="Sea Freight Services">
+                <span class="deck__pick-box" aria-hidden="true"></span>
+                <span class="deck__pick-text">Add to enquiry</span>
+              </button>
             </div>
           </article>
-          <article class="deck__card" style="--i:6">
+          <article class="deck__card" data-name="Customs Documentation and Clearance Support" data-tags="Customs|Clearance Support" style="--i:6">
             <div class="deck__media"><img src="images/relocation-packing.jpg" alt="Customs Documentation and Clearance Support" loading="lazy" decoding="async"></div>
             <div class="deck__body">
               <span class="deck__index">07</span>
               <h2 class="deck__title">Customs Documentation and Clearance Support</h2>
               <p class="deck__desc">International relocations involve complex documentation and customs procedures. Our experienced team assists with preparing the required paperwork, coordinating export formalities, and supporting customs clearance.</p>
               <div class="deck__tags"><span>Customs</span><span>Clearance Support</span></div>
+              <button type="button" class="deck__pick" aria-pressed="false" data-service="Customs Documentation and Clearance Support">
+                <span class="deck__pick-box" aria-hidden="true"></span>
+                <span class="deck__pick-text">Add to enquiry</span>
+              </button>
             </div>
           </article>
-          <article class="deck__card" style="--i:7">
+          <article class="deck__card" data-name="Secure Warehousing and Storage" data-tags="Warehousing|Secure Storage" style="--i:7">
             <div class="deck__media"><img src="images/secure-warehouse.jpg" alt="Secure Warehousing and Storage" loading="lazy" decoding="async"></div>
             <div class="deck__body">
               <span class="deck__index">08</span>
               <h2 class="deck__title">Secure Warehousing and Storage</h2>
               <p class="deck__desc">MS Logistics offers secure short-term and long-term warehousing solutions for household goods, office equipment, and export shipments. Our warehouse is designed to keep your belongings safe, organised, and protected.</p>
               <div class="deck__tags"><span>Warehousing</span><span>Secure Storage</span></div>
+              <button type="button" class="deck__pick" aria-pressed="false" data-service="Secure Warehousing and Storage">
+                <span class="deck__pick-box" aria-hidden="true"></span>
+                <span class="deck__pick-text">Add to enquiry</span>
+              </button>
             </div>
           </article>
-          <article class="deck__card" style="--i:8">
+          <article class="deck__card" data-name="Professional Export Packing" data-tags="Packing|Export Quality" style="--i:8">
             <div class="deck__media"><img src="images/relocation-packing.jpg" alt="Professional Export Packing" loading="lazy" decoding="async"></div>
             <div class="deck__body">
               <span class="deck__index">09</span>
               <h2 class="deck__title">Professional Export Packing</h2>
               <p class="deck__desc">Proper packing is the foundation of every successful relocation. Our trained packing specialists use premium export-quality materials such as 7-Ply &amp; 9-Ply export cartons, bubble wrap, foam, and customised wooden crates.</p>
               <div class="deck__tags"><span>Packing</span><span>Export Quality</span></div>
+              <button type="button" class="deck__pick" aria-pressed="false" data-service="Professional Export Packing">
+                <span class="deck__pick-box" aria-hidden="true"></span>
+                <span class="deck__pick-text">Add to enquiry</span>
+              </button>
             </div>
           </article>
-          <article class="deck__card" style="--i:9">
+          <article class="deck__card" data-name="Door-to-Door Relocation Management" data-tags="Relocation|End-to-End Management" style="--i:9">
             <div class="deck__media"><img src="images/relocation-packing-v2.jpg" alt="Door-to-Door Relocation Management" loading="lazy" decoding="async"></div>
             <div class="deck__body">
               <span class="deck__index">10</span>
               <h2 class="deck__title">Door-to-Door Relocation Management</h2>
               <p class="deck__desc">Our door-to-door relocation service provides complete management of your move from the initial survey to final delivery. We coordinate packing, transportation, freight, customs support, warehousing, and delivery.</p>
               <div class="deck__tags"><span>Relocation</span><span>End-to-End Management</span></div>
+              <button type="button" class="deck__pick" aria-pressed="false" data-service="Door-to-Door Relocation Management">
+                <span class="deck__pick-box" aria-hidden="true"></span>
+                <span class="deck__pick-text">Add to enquiry</span>
+              </button>
             </div>
           </article>
         </div>
@@ -194,6 +245,14 @@
       </div>
     </section>
 
+
+    <div class="picked" id="svcBar" hidden>
+      <div class="container picked__inner">
+        <span class="picked__count" id="svcBarCount">0 services selected</span>
+        <button type="button" class="picked__clear" id="svcClear">Clear</button>
+        <a class="btn btn--primary picked__go" id="svcGo" href="contact.html#contactForm">Continue to enquiry</a>
+      </div>
+    </div>
   </main>
 
   <!-- Footer -->
@@ -256,6 +315,5 @@
   <script src="js/animation.js" defer></script>
   <script src="js/interact.js" defer></script>
   <script src="js/enhance.js" defer></script>
-  <script src="js/deck.js" defer></script>
 </body>
 </html>

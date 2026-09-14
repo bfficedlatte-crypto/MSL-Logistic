@@ -839,3 +839,38 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* Small label above a page headline ------------------------------------- */
 
 .lede__kicker{margin:0 0 1rem;font-size:.8125rem;font-weight:500;color:var(--ink-45)}
+
+/* Deep link from the header button lands below the sticky header */
+#contactForm{scroll-margin-top:calc(var(--header-h) + 2rem)}
+.contact__formwrap:target,.contact__formwrap{scroll-margin-top:calc(var(--header-h) + 2rem)}
+
+/* Contact: details and form sit in cards -------------------------------- */
+
+.contact__details,.contact__formwrap{
+  padding:clamp(1.5rem,3vw,2.25rem);
+  background:var(--object);
+  border:1px solid var(--rule);
+}
+.contact__details{border-top:3px solid var(--signal)}
+.contact__formwrap{border-top:3px solid var(--ink)}
+.contact__card-title{margin:0 0 1.25rem;font-size:1.0625rem;font-weight:500}
+.contact__item:first-child{border-top:1px solid var(--rule)}
+.contact__item:last-of-type{border-bottom:0;padding-bottom:0}
+.contact__form{gap:1.1rem}
+.form__group input,.form__group select,.form__group textarea{background:var(--paper);padding:.7rem .75rem;border:1px solid var(--rule)}
+.form__group input:focus,.form__group select:focus,.form__group textarea:focus{border-color:var(--ink)}
+.form__group.is-invalid input,.form__group.is-invalid select,.form__group.is-invalid textarea{border-color:#A32D2D}
+.form__group.is-valid input,.form__group.is-valid select,.form__group.is-valid textarea{border-color:var(--signal)}
+
+/* Wordmark: bold, with Logistics in gold -------------------------------- */
+
+:root{--gold:#B8860B;--gold-light:#F5B301}
+
+.header__logo{font-weight:700}
+.header__logo span{font-weight:700;color:var(--gold)}
+
+/* On the navy footer and loader a brighter gold is needed to carry */
+.footer__logo{font-weight:700}
+.footer__logo span{font-weight:700;color:var(--gold-light)}
+.loader__logo{font-weight:700}
+.loader__logo span{font-weight:700;color:var(--gold-light)}

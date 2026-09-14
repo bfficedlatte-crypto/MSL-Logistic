@@ -511,3 +511,48 @@
     }, { passive: true });
   });
 })();
+
+/* Headline figures count up when they scroll into view. */
+(function () {
+  var nums = Array.prototype.slice.call(document.querySelectorAll('.stats__number[data-target]'));
+  if (!nums.length) return;
+
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function run(el) {
+    var target = parseInt(el.getAttribute('data-target'), 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    if (isNaN(target)) return;
+    if (still || !window.requestAnimationFrame) { el.textContent = target + suffix; return; }
+
+    var start = null, dur = 1300;
+    function step(now) {
+      if (start === null) start = now;
+      var p = Math.min((now - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    nums.forEach(run);
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      run(e.target);
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -5% 0px' });
+
+  nums.forEach(function (n) { io.observe(n); });
+
+  // Safety net: if nothing has fired after two seconds, show the numbers anyway.
+  setTimeout(function () {
+    nums.forEach(function (n) { if (n.textContent.trim() === '0') { run(n); io.unobserve(n); } });
+  }, 2000);
+})();
